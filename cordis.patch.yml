@@ -1,0 +1,22 @@
+# dsh-context-steady bundle patch: mount the context-steady plugin on top of
+# the profile's base bundle. Every config field has a schema default, so this
+# row (or a later profile patch layer) may supply only the fields it changes:
+#
+#   - id: context-steady
+#     name: 'dsh-context-steady'
+#     config:
+#       activationThresholdTokens: 240000
+#       digest:
+#         llm:
+#           enabled: true
+#           provider: <side-digest provider>
+#           model: <side-digest model>
+#
+# By default only the deterministic pipeline runs; raw-surface pruning stays
+# fail-closed until `digest.llm.enabled` produces authoritative digests. If
+# the host bundle also mounts `ctx.storageDomain`, those authoritative digests
+# persist outside the session log and restore on resume.
+- insert:
+    - id: context-steady
+      name: 'dsh-context-steady'
+      config: {}
